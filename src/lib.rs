@@ -30,6 +30,10 @@ impl<T, F> BinaryHeapCompare<T, F>
         r
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.array.is_empty()
+    }
+
     pub fn push(&mut self, x: T) {
         self.array.push(x);
         let i = self.array.len() - 1;
@@ -129,4 +133,10 @@ fn it_works_from_vec() {
     assert_eq!(h.peek(), Some(2));
     assert_eq!(h.peek(), Some(1));
     assert_eq!(h.peek(), None);
+}
+
+#[test]
+fn it_works_empty() {
+    let h = BinaryHeapCompare::new(|x: &i32, y: &i32| x.cmp(y));
+    assert!(h.is_empty())
 }
