@@ -1,0 +1,9 @@
+[package]
+name = "binary_heap_compare"
+version = "0.1.0"
+authors = ["Mario Geiger <geiger.mario@gmail.com>"]
+
+[dependencies]
+
+[lib]
+name = "binary_heap_compare"
