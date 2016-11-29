@@ -1,12 +1,12 @@
 use std::cmp::Ordering;
+use std::fmt;
 
-#[allow(dead_code)]
+#[derive(Clone, Default)]
 pub struct BinaryHeapCompare<T, F> {
     array: Vec<T>,
     compare: F,
 }
 
-#[allow(dead_code)]
 impl<T, F> BinaryHeapCompare<T, F>
     where F: Fn(&T, &T) -> Ordering
 {
@@ -34,19 +34,35 @@ impl<T, F> BinaryHeapCompare<T, F>
         self.array.is_empty()
     }
 
+    pub fn len(&self) -> usize {
+        self.array.len()
+    }
+
+    pub fn clear(&mut self) {
+        self.array.clear();
+    }
+
     pub fn push(&mut self, x: T) {
         self.array.push(x);
         let i = self.array.len() - 1;
         self.shift_up(i);
     }
 
-    pub fn peek(&mut self) -> Option<T> {
+    pub fn pop(&mut self) -> Option<T> {
         if self.array.is_empty() {
             None
         } else {
             let r = self.array.swap_remove(0);
             self.shift_down(0);
             Some(r)
+        }
+    }
+
+    pub fn peek(&self) -> Option<&T> {
+        if self.array.is_empty() {
+            None
+        } else {
+            Some(&self.array[0])
         }
     }
 
@@ -111,32 +127,11 @@ impl<T, F> BinaryHeapCompare<T, F>
     }
 }
 
-#[test]
-fn it_works() {
-    let mut h = BinaryHeapCompare::new(|x: &i32, y: &i32| x.cmp(y));
-    h.push(1);
-    h.push(2);
-    h.push(3);
-    h.push(0);
-    assert_eq!(h.peek(), Some(3));
-    assert_eq!(h.peek(), Some(2));
-    assert_eq!(h.peek(), Some(1));
-    assert_eq!(h.peek(), Some(0));
-    assert_eq!(h.peek(), None);
-}
-
-#[test]
-fn it_works_from_vec() {
-    let mut h = BinaryHeapCompare::from_vec(vec![1,3,5,2], |x: &i32, y: &i32| x.cmp(y));
-    assert_eq!(h.peek(), Some(5));
-    assert_eq!(h.peek(), Some(3));
-    assert_eq!(h.peek(), Some(2));
-    assert_eq!(h.peek(), Some(1));
-    assert_eq!(h.peek(), None);
-}
-
-#[test]
-fn it_works_empty() {
-    let h = BinaryHeapCompare::new(|x: &i32, y: &i32| x.cmp(y));
-    assert!(h.is_empty())
+impl<T, F> fmt::Debug for BinaryHeapCompare<T, F>
+    where F: Fn(&T, &T) -> Ordering,
+          T: fmt::Debug
+{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self.array)
+    }
 }
