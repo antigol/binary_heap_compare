@@ -66,6 +66,15 @@ impl<T, F> BinaryHeapCompare<T, F>
         }
     }
 
+    pub fn retain<G: FnMut(&T) -> bool>(&mut self, mut f: G) {
+        for i in (0..self.array.len()).rev() {
+            if !f(&self.array[i]) {
+                self.array.swap_remove(i);
+                self.shift_down(i);
+            }
+        }
+    }
+
     fn shift_up(&mut self, mut i: usize) {
         while i > 0 {
             let p = i / 2;
