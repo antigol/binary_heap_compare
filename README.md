@@ -31,6 +31,7 @@ Methods
 - `fn pop(&mut self) -> Option<T>` remove and return max
 - `fn peek(&self) -> Option<&T>` return ref to max
 - `fn retain<G: FnMut(&T) -> bool>(&mut self, mut f: G)` remove elements when f return false
+- `fn update<G: FnMut(&T) -> Option<T>>(&mut self, mut f: G)` modify elements (None correspond to no modification)
 
 Traits
 - `fmt::Debug`

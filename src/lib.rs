@@ -75,6 +75,16 @@ impl<T, F> BinaryHeapCompare<T, F>
         }
     }
 
+    pub fn update<G: FnMut(&T) -> Option<T>>(&mut self, mut f: G) {
+        for i in 0..self.array.len() {
+            if let Some(new) = f(&self.array[i]) {
+                self.array[i] = new;
+                self.shift_down(i);
+                self.shift_up(i);
+            }
+        }
+    }
+
     fn shift_up(&mut self, mut i: usize) {
         while i > 0 {
             let p = i / 2;
